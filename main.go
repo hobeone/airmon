@@ -21,10 +21,14 @@ var (
 func init() {
 	flag.Usage = func() {
 		fmt.Fprint(os.Stderr,
-			`sds011 reads data from the SDS011 sensor and exports them on a HTTP interface at /debug/vars
+			`Reads data from the SDS011 sensor and exports them on a HTTP interface at /debug/vars.
+Can be easily graphed and monitored from Netdata using the expvar monitor.
 
 If the debug flag is given it will also output to the console with the following format:
-an RFC3339 timestamp, the PM2.5 level, the PM10 level`)
+an RFC3339 timestamp, the PM2.5 level, the PM10 level.
+
+Use '-debug -v 6' to see what it being sent on the wir.
+`)
 		fmt.Fprintf(os.Stderr, "\n\nUsage of %s:\n", os.Args[0])
 		flag.PrintDefaults()
 	}
@@ -50,8 +54,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	did, err := sensor.DeviceID()
-	fmt.Println(did)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Sensor ID: %s", did)
 
 	fmt.Printf("Setting %s to 1m readings\n", *portPath)
 	err = sensor.SetCycle(1)
