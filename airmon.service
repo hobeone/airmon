@@ -1,0 +1,10 @@
+[Unit]
+Description=Airmon Service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/airmon
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
